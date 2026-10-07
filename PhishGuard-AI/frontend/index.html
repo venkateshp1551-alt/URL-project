@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Analyze URL structure with PhishGuard AI's machine-learning phishing risk checker."
+    >
+    <title>PhishGuard AI — URL Safety Scanner</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="PhishGuard AI home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M16 3.5 26 7v7.6c0 6.5-4.2 11.3-10 14-5.8-2.7-10-7.5-10-14V7l10-3.5Z" stroke="currentColor" stroke-width="2"/>
+            <path d="m11.5 15.5 3 3 6-6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="brand-copy">
+          <span class="brand-name">PhishGuard <span>AI</span></span>
+          <span class="brand-tagline">AI-Powered Phishing URL Detection</span>
+        </span>
+      </a>
+      <a class="header-link" href="#how-it-works">How it works <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-glow" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> A smarter first line of defense</p>
+          <h1 id="hero-title">Detect Phishing URLs<br>Before They <span>Harm You</span></h1>
+          <p class="hero-description">
+            Analyze suspicious URLs using machine learning and identify potential
+            phishing threats before clicking.
+          </p>
+
+          <form class="scan-card" id="scan-form" novalidate>
+            <label for="url-input">Paste a URL to check</label>
+            <div class="input-row">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M10.5 13.5a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.7 1.7M13.5 10.5a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.7-1.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <input
+                id="url-input"
+                name="url"
+                type="text"
+                inputmode="url"
+                autocomplete="url"
+                maxlength="4096"
+                placeholder="Enter a URL to scan..."
+                aria-describedby="input-hint form-message"
+                required
+              >
+              <button class="scan-button" id="scan-button" type="submit">
+                <span class="button-icon" aria-hidden="true">🔍</span>
+                <span class="button-label">Scan URL</span>
+              </button>
+            </div>
+            <div class="input-meta">
+              <p id="input-hint">Try an example: <button type="button" class="example-link" data-example="https://example.com">https://example.com</button></p>
+              <span class="privacy-label"><span aria-hidden="true">⌑</span> Scanned privately</span>
+            </div>
+            <p class="form-message" id="form-message" role="alert" aria-live="polite"></p>
+          </form>
+
+          <div class="trust-note">
+            <span class="trust-icon" aria-hidden="true">✓</span>
+            <span>URL structure analysis <i></i> No website visits <i></i> Instant results</span>
+          </div>
+        </div>
+        <div class="hero-decoration" aria-hidden="true">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="orbit-center">
+            <svg viewBox="0 0 100 100" fill="none">
+              <path d="M50 9 81 20v24c0 20-13 35-31 44C32 79 19 64 19 44V20L50 9Z" stroke="currentColor" stroke-width="4"/>
+              <path d="M37 48 46 57 65 37" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="orbit-caption">URL intelligence</span>
+          <span class="orbit-spark spark-one"></span>
+          <span class="orbit-spark spark-two"></span>
+          <span class="orbit-spark spark-three"></span>
+        </div>
+      </section>
+
+      <section class="result-section section-wrap" id="result-section" aria-labelledby="result-heading" hidden>
+        <div class="section-heading result-heading">
+          <div>
+            <p class="eyebrow eyebrow-light">Scan complete</p>
+            <h2 id="result-heading">Your URL assessment</h2>
+          </div>
+          <p class="scanned-url" id="scanned-url"></p>
+        </div>
+        <div class="result-card" id="result-card">
+          <div class="result-main">
+            <div class="result-status">
+              <span class="result-status-icon" id="result-icon" aria-hidden="true"></span>
+              <div>
+                <p class="result-kicker" id="assessment-kicker">Machine learning assessment</p>
+                <h3 id="prediction-text"></h3>
+              </div>
+            </div>
+            <div class="risk-meter">
+              <div class="meter-topline">
+                <span>Phishing risk score</span>
+                <strong><span id="risk-score">0</span><small> / 100</small></strong>
+              </div>
+              <div
+                class="meter-track"
+                id="risk-meter"
+                role="progressbar"
+                aria-label="Phishing risk score"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+              >
+                <span class="meter-fill" id="meter-fill"></span>
+              </div>
+              <div class="meter-labels"><span>Low</span><span>Medium</span><span>High</span></div>
+            </div>
+          </div>
+          <div class="result-stats">
+            <article class="stat-tile">
+              <span class="stat-label">Risk level</span>
+              <strong id="risk-level"></strong>
+            </article>
+            <article class="stat-tile">
+              <span class="stat-label" id="confidence-label">Model confidence</span>
+              <strong><span id="confidence"></span><small>%</small></strong>
+            </article>
+            <article class="stat-tile">
+              <span class="stat-label">Detection method</span>
+              <strong class="detection-method" id="detection-method"></strong>
+            </article>
+          </div>
+          <div class="reasons-block">
+            <h4>Why this result?</h4>
+            <ul id="reasons-list"></ul>
+            <p id="no-reasons" hidden>No additional feature-based reasons were returned.</p>
+          </div>
+          <p class="result-disclaimer">Risk score and model confidence are model-derived indicators, not guarantees about a website.</p>
+        </div>
+      </section>
+
+      <section class="how-section section-wrap" id="how-it-works" aria-labelledby="how-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow eyebrow-light">Simple by design</p>
+            <h2 id="how-title">How it works</h2>
+          </div>
+          <p class="section-intro">A quick, privacy-conscious check—without loading the website.</p>
+        </div>
+        <div class="steps-grid">
+          <article class="step-card">
+            <span class="step-number">01</span>
+            <span class="step-icon" aria-hidden="true">↗</span>
+            <h3>Enter URL</h3>
+            <p>Paste the URL you want to inspect.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">02</span>
+            <span class="step-icon" aria-hidden="true">⌘</span>
+            <h3>Extract URL features</h3>
+            <p>Analyze URL structure and text locally.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">03</span>
+            <span class="step-icon" aria-hidden="true">◈</span>
+            <h3>Random Forest analysis</h3>
+            <p>Compare its features with learned patterns.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">04</span>
+            <span class="step-icon" aria-hidden="true">◎</span>
+            <h3>Risk assessment</h3>
+            <p>Review the score and model-derived reasons.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="model-section section-wrap" aria-labelledby="model-title">
+        <div class="model-panel">
+          <div class="model-copy">
+            <p class="eyebrow eyebrow-light">Under the hood</p>
+            <h2 id="model-title">Machine learning<br>model</h2>
+            <p class="algorithm-line"><strong>Algorithm:</strong> Random Forest Classifier</p>
+            <p>URL-based signals are evaluated by a Random Forest classifier trained to distinguish legitimate and phishing examples.</p>
+            <span class="model-badge"><span></span> 23 URL-based features</span>
+          </div>
+          <div class="metrics-area">
+            <div class="metrics-heading">
+              <span class="metrics-icon" aria-hidden="true">↗</span>
+              <div>
+                <strong>Held-out test results</strong>
+                <span>Evaluation on unseen test samples</span>
+              </div>
+            </div>
+            <div class="metrics-grid">
+              <div class="metric-item"><span>Test accuracy</span><strong>99.57%</strong></div>
+              <div class="metric-item"><span>Precision</span><strong>99.87%</strong></div>
+              <div class="metric-item"><span>Recall</span><strong>99.13%</strong></div>
+              <div class="metric-item"><span>F1 score</span><strong>99.50%</strong></div>
+            </div>
+            <p class="metrics-footnote">Measured on 47,074 held-out samples. Dataset performance may not represent results on future URLs.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="security-section section-wrap" aria-label="Security notice">
+        <span class="security-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 3 20 6v6c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6l8-3Z" stroke="currentColor" stroke-width="1.7"/>
+            <path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <div>
+          <strong>Your safety comes first</strong>
+          <p>PhishGuard AI analyzes URL structure and does not open or visit the submitted website.</p>
+        </div>
+        <span class="security-tag">URL text only</span>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="footer-brand" href="#top">PhishGuard <span>AI</span></a>
+      <p>Machine learning can help spot risks, but no scan can guarantee a URL is safe.</p>
+      <span>Built for a safer web.</span>
+    </footer>
+  </body>
+</html>
