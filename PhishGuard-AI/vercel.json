@@ -1,11 +1,7 @@
 {
   "functions": {
     "backend/app.py": {
-      "includeFiles": [
-        "frontend/**",
-        "model/phishing_model.pkl",
-        "model/feature_names.json"
-      ]
+      "includeFiles": "{frontend/**,model/**}"
     }
   }
 }
