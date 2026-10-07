@@ -75,19 +75,17 @@ From the project directory, run:
 python -m flask --app backend.app run --host 127.0.0.1 --port 5001
 ```
 
-The API listens locally at `http://127.0.0.1:5001`. It provides
-`GET /` and `POST /predict` (JSON body: `{"url": "https://example.com"}`).
-Predictions are computed from URL text only; the API does not visit submitted
-URLs or persist them.
+The API listens locally at `http://127.0.0.1:5001`. The Flask app serves the
+existing frontend at `/`, its assets at their file paths, and predictions at
+`POST /api/predict` (also available locally at `POST /predict`; JSON body:
+`{"url": "https://example.com"}`). The frontend uses the same-origin
+`/api/predict` path, so it works locally and after deployment without a
+localhost production URL. Predictions use URL text only; URLs are not visited
+or persisted.
 
-## Run the frontend
+## Deploy to Vercel
 
-From the project directory, start a static file server:
-
-```bash
-python -m http.server 8080 --bind 127.0.0.1 --directory frontend
-```
-
-Then open `http://127.0.0.1:8080`. The frontend sends prediction requests to
-`http://127.0.0.1:5001/predict`; make sure the compatible PhishGuard API is
-listening on that port.
+Deploy the project root (`PhishGuard-AI`) as the Vercel project root. The
+`pyproject.toml` entrypoint runs `backend.app:app`; `vercel.json` includes the
+frontend files and model artifacts in that Python function. Flask serves the
+frontend at `/` and handles API requests at `/api/predict`.
