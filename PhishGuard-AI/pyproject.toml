@@ -1,2 +1,16 @@
+[project]
+name = "phishguard-ai"
+version = "0.1.0"
+description = "AI-powered phishing URL detection system"
+requires-python = ">=3.12"
+dependencies = [
+    "Flask",
+    "Flask-CORS",
+    "pandas",
+    "numpy",
+    "scikit-learn",
+    "joblib"
+]
+
 [tool.vercel]
 entrypoint = "backend.app:app"
